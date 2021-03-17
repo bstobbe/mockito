@@ -1573,14 +1573,14 @@ import java.util.function.Function;
  * In the following example, the <code>Foo</code> type's construction would generate a mock:
  *
  * <pre class="code"><code class="java">
- * assertEquals("foo", Foo.method());
+ * assertEquals("foo", new Foo().method());
  * try (MockedConstruction<Foo> mocked = mockConstruction(Foo.class)) {
  * Foo foo = new Foo();
  * when(foo.method()).thenReturn("bar");
  * assertEquals("bar", foo.method());
  * verify(foo).method();
  * }
- * assertEquals("foo", foo.method());
+ * assertEquals("foo", new Foo().method());
  * </code></pre>
  *
  * Due to the defined scope of the mocked construction, object construction returns to its original behavior once the scope is
@@ -2459,6 +2459,17 @@ public class Mockito extends ArgumentMatchers {
      */
     public static <T> void reset(T... mocks) {
         MOCKITO_CORE.reset(mocks);
+    }
+
+    /**
+     * Clears all mocks, type caches and instrumentations.
+     * <p>
+     * By clearing Mockito's state, previously created mocks might begin to malfunction. This option can be used if
+     * Mockito's caches take up too much space or if the inline mock maker's instrumentation is causing performance
+     * issues in code where mocks are no longer used. Normally, you would not need to use this option.
+     */
+    public static void clearAllCaches() {
+        MOCKITO_CORE.clearAllCaches();
     }
 
     /**
